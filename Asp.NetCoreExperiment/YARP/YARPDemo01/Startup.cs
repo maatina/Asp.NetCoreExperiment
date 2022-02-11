@@ -100,7 +100,7 @@ namespace YARPDemo01
                 //通过不同的body添加不同的header
                 builderContext.AddRequestTransform(async transformContext =>
                {
-                   var content = await transformContext.ProxyRequest.Content.ReadAsStringAsync();
+                   //var content = await transformContext.ProxyRequest.Content.ReadAsStringAsync();
                    transformContext.ProxyRequest.Headers.Add("X-NSS-UUID", "ABCD" + DateTime.Now.ToString()); 
                });
             });
