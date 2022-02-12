@@ -33,78 +33,80 @@ namespace YARPDemo01
         {
             AddAuth(services);
 
-            var routes = new[]{
-                new RouteConfig()
-                {
-                    RouteId = "webapi01",
-                    ClusterId = "webapi01_cluster",
-                    //AuthorizationPolicy="Permission",
+            ///#
+            //var routes = new[]{
+            //    new RouteConfig()
+            //    {
+            //        RouteId = "webapi01",
+            //        ClusterId = "webapi01_cluster",
+            //        //AuthorizationPolicy="Permission",
                   
-                    Match = new RouteMatch
-                    {
-                        Path = "/webapi01/{**catch-all}"
-                    }
-                },
+            //        Match = new RouteMatch
+            //        {
+            //            Path = "/webapi01/{**catch-all}"
+            //        }
+            //    },
 
-                new RouteConfig()
-                {
-                    RouteId = "authservice",
-                    ClusterId = "auth_cluster",
-                   // AuthorizationPolicy="Permission",
-                    Match = new RouteMatch
-                    {
-                        Path = "/auth/{**catch-all}"
-                    }
-                },
-                new RouteConfig()
-                {
-                    RouteId = "yarpservice",
-                    ClusterId = "yarp_cluster",
-                    AuthorizationPolicy="Permission",
-                    Match = new RouteMatch
-                    {
-                        Path = "/yarp/{**catch-all}"
-                    }
-                }
+            //    new RouteConfig()
+            //    {
+            //        RouteId = "authservice",
+            //        ClusterId = "auth_cluster",
+            //       // AuthorizationPolicy="Permission",
+            //        Match = new RouteMatch
+            //        {
+            //            Path = "/auth/{**catch-all}"
+            //        }
+            //    },
+            //    new RouteConfig()
+            //    {
+            //        RouteId = "yarpservice",
+            //        ClusterId = "yarp_cluster",
+            //        AuthorizationPolicy="Permission",
+            //        Match = new RouteMatch
+            //        {
+            //            Path = "/yarp/{**catch-all}"
+            //        }
+            //    }
 
-            };
-            var clusters = new[]{
-                new ClusterConfig()
-                {
-                    ClusterId = "webapi01_cluster",
-                    Destinations = new Dictionary<string, DestinationConfig>(StringComparer.OrdinalIgnoreCase)
-                    {
-                        { "webapi01_cluster/destination", new DestinationConfig() { Address ="https://localhost:9001/"} }
-                    }
-                },
-                  new ClusterConfig()
-                {
-                    ClusterId = "auth_cluster",
-                    Destinations = new Dictionary<string, DestinationConfig>(StringComparer.OrdinalIgnoreCase)
-                    {
-                        { "auth_cluster/destination", new DestinationConfig() { Address = "https://localhost:5001/" } }
-                    }
-                },
-                new ClusterConfig()
-                {
-                    ClusterId = "yarp_cluster",
-                    Destinations = new Dictionary<string, DestinationConfig>(StringComparer.OrdinalIgnoreCase)
-                    {
-                        { "yarp_cluster/destination", new DestinationConfig() { Address = "https://localhost:6001/" } }
-                    }
-                }
-            };
+            //};
+            //var clusters = new[]{
+            //    new ClusterConfig()
+            //    {
+            //        ClusterId = "webapi01_cluster",
+            //        Destinations = new Dictionary<string, DestinationConfig>(StringComparer.OrdinalIgnoreCase)
+            //        {
+            //            { "webapi01_cluster/destination", new DestinationConfig() { Address ="https://localhost:9001/"} }
+            //        }
+            //    },
+            //      new ClusterConfig()
+            //    {
+            //        ClusterId = "auth_cluster",
+            //        Destinations = new Dictionary<string, DestinationConfig>(StringComparer.OrdinalIgnoreCase)
+            //        {
+            //            { "auth_cluster/destination", new DestinationConfig() { Address = "https://localhost:5001/" } }
+            //        }
+            //    },
+            //    new ClusterConfig()
+            //    {
+            //        ClusterId = "yarp_cluster",
+            //        Destinations = new Dictionary<string, DestinationConfig>(StringComparer.OrdinalIgnoreCase)
+            //        {
+            //            { "yarp_cluster/destination", new DestinationConfig() { Address = "https://localhost:6001/" } }
+            //        }
+            //    }
+            //};
 
-            services.AddReverseProxy().LoadFromMemory(routes, clusters).AddTransforms(builderContext =>
-            {
-                //通过不同的body添加不同的header
-                builderContext.AddRequestTransform(async transformContext =>
-               {
-                   //var content = await transformContext.ProxyRequest.Content.ReadAsStringAsync();
-                   transformContext.ProxyRequest.Headers.Add("X-NSS-UUID", "ABCD" + DateTime.Now.ToString()); 
-               });
-            });
-            // services.AddReverseProxy().LoadFromConfig(Configuration.GetSection("ReverseProxy"));
+            ////services.AddReverseProxy().LoadFromMemory(routes, clusters).AddTransforms(builderContext =>
+            ////{
+            ////    //通过不同的body添加不同的header
+            ////    builderContext.AddRequestTransform(async transformContext =>
+            ////   {
+            ////       var content = await transformContext.ProxyRequest.Content.ReadAsStringAsync();
+            ////       transformContext.ProxyRequest.Headers.Add("X-NSS-UUID", "ABCD" + DateTime.Now.ToString()); 
+            ////   });
+            ////});
+    
+            services.AddReverseProxy().LoadFromConfig(Configuration.GetSection("ReverseProxy"));
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -163,7 +165,7 @@ namespace YARPDemo01
                 audienceConfig["Issuer"],
                 audienceConfig["Audience"],
                 signingCredentials,
-                expiration: TimeSpan.FromSeconds(1000000)//设置Token过期时间
+                expiration: TimeSpan.FromSeconds(200)//(1000000)//设置Token过期时间
                 );
 
             services.AddAuthorization(options =>

@@ -64,7 +64,7 @@ namespace AuthenticationAuthorization_Token
                 audienceConfig["Issuer"],
                 audienceConfig["Audience"],
                 signingCredentials,
-                expiration: TimeSpan.FromSeconds(1000000)//设置Token过期时间
+                expiration: TimeSpan.FromSeconds(1)//1000000)//设置Token过期时间
                 );          
             services.AddSingleton(permissionRequirement);
         }
